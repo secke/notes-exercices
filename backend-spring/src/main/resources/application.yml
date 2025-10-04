@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: backend-spring
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:notesdb}
+    username: ${DB_USER:notesuser}
+    password: ${DB_PASSWORD:notespass}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  security:
+    user:
+      name: admin
+      password: admin123
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:rBrNvc3XW7F1Ra58uah92y8cpvqlZJ4jv6/EG/cWlKAkq7Z5Dx2uN4BIg9qu2ByQTJjmVuogi39GwxG0mev5dVPxOOnH4gSZRYKXBe2kMnCR2N6BuylGqLQzjUpr1dX8oQuRaj7pzZejURJBvu5sXvAo3X+LOTrXMaW4FA6VtUjnP9q4+LHQZixmadmsbMw3msp7FWqU+faiObpN80aB6xVeneJpj//F6wERyrDR2V0lpM5suwCD7VIGOLuctUHBTtjN7X7k5qx2xcXPqIyrbrjEtv0OBUsZSuG4lJjEGYmYvgQeAzOOcS8Jo2AQhglVRkBMCpLU+qcRw7gGPlspMw==}
+  expiration: 86400000 # 24 hours in milliseconds
+  refresh-expiration: 604800000 # 7 days in milliseconds
+
+# OpenAPI Documentation
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+# CORS Configuration
+cors:
+  allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:8081}
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.example.backend_spring: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

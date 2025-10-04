@@ -1,0 +1,72 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: notes-postgres
+    environment:
+      POSTGRES_DB: notesdb
+      POSTGRES_USER: notesuser
+      POSTGRES_PASSWORD: notespass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notesuser -d notesdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - notes-network
+
+  # Spring Boot API
+  api:
+    build:
+      context: ../backend-spring
+      dockerfile: Dockerfile
+    container_name: notes-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: notesdb
+      DB_USER: notesuser
+      DB_PASSWORD: notespass
+      JWT_SECRET: rBrNvc3XW7F1Ra58uah92y8cpvqlZJ4jv6/EG/cWlKAkq7Z5Dx2uN4BIg9qu2ByQTJjmVuogi39GwxG0mev5dVPxOOnH4gSZRYKXBe2kMnCR2N6BuylGqLQzjUpr1dX8oQuRaj7pzZejURJBvu5sXvAo3X+LOTrXMaW4FA6VtUjnP9q4+LHQZixmadmsbMw3msp7FWqU+faiObpN80aB6xVeneJpj//F6wERyrDR2V0lpM5suwCD7VIGOLuctUHBTtjN7X7k5qx2xcXPqIyrbrjEtv0OBUsZSuG4lJjEGYmYvgQeAzOOcS8Jo2AQhglVRkBMCpLU+qcRw7gGPlspMw==
+      CORS_ORIGINS: http://localhost:3000,http://localhost:8081
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - notes-network
+    restart: unless-stopped
+
+  # Web Frontend (Nginx serving React build)
+  web:
+    image: nginx:alpine
+    container_name: notes-web
+    depends_on:
+      - api
+    ports:
+      - "8081:80"
+    volumes:
+      - ../web-frontend/build:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - notes-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  notes-network:
+    driver: bridge
