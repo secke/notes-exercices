@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Notes App",
+    "slug": "notes-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.notesapp.mobile"
+    },
+    "android": {
+      "package": "com.notesapp.mobile"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
