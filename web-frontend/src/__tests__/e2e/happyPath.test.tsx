@@ -1,16 +1,3 @@
-/**
- * Test E2E "heureux" - Workflow complet
- * 
- * Ce test simule le parcours utilisateur typique :
- * 1. Inscription
- * 2. Création d'une note
- * 3. Modification de la note
- * 4. Partage de la note
- * 
- * Note : Pour un vrai test E2E, utilisez Playwright ou Cypress
- * Ce test est une simulation avec des mocks
- */
-
 import { describe, it, expect, vi } from 'vitest';
 import { authApi, notesApi, shareApi } from '../../lib/api';
 
