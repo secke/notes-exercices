@@ -168,5 +168,5 @@ Les URLs sont détectées automatiquement selon la plateforme :
 Pour plus d'informations sur chaque composant :
 
 - **Backend API** : [backend-spring/README.md](./backend-spring/README.md)
-- **Frontend Web** : `web-frontend/src/README.md`
+- **Frontend Web** : [web-frontend/README.md](./web-frontend/README.md)
 - **Application Mobile** : [mobile-app/README.md](./mobile-app/README.md)
